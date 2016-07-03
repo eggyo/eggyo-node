@@ -13,9 +13,9 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/geo', function(request, response) {
+app.get('/geo/:value', function(request, response) {
 
-        response.json([{test:'eggyo geo test'}]);
+        response.json([{test:request.params.value}]);
 });
 
 app.listen(app.get('port'), function() {
