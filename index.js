@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var LatLon = require('geodesy').LatLonEllipsoidal;
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -14,10 +15,14 @@ app.get('/', function(request, response) {
 });
 
 app.get('/geo/:lat/:lon', function(request, response) {
+  var loc = new LatLon(request.params.lat,request.params.lon);
+  var utm = loc.toUtm()
+  var mgrs = utm.toMgrs()
+  
   var data = {
         "result": {
-            "Lat": request.params.lat,
-            "Long": request.params.lon
+            "utm": utm,
+            "mgrs": mgrs
         }
     }; 
         response.json(data);
