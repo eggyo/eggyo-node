@@ -13,9 +13,14 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/geo/:value', function(request, response) {
-
-        response.json([{test:request.params.value}]);
+app.get('/geo/:lat/:lon', function(request, response) {
+  var data = {
+        "result": {
+            "Lat": request.params.lat,
+            "Long": request.params.lon
+        }
+    }; 
+        response.json(data);
 });
 
 app.listen(app.get('port'), function() {
