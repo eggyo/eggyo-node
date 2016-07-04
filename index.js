@@ -21,6 +21,7 @@ app.get('/geo/:lat/:lon', function(request, response) {
   
   var data = {
         "result": {
+            "latLon": loc.toString(),
             "utm": utm.toString(),
             "mgrs": mgrs.toString()
         }
