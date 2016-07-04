@@ -21,8 +21,8 @@ app.get('/geo/:lat/:lon', function(request, response) {
   
   var data = {
         "result": {
-            "utm": utm,
-            "mgrs": mgrs
+            "utm": utm.toString(),
+            "mgrs": mgrs.toString()
         }
     }; 
         response.json(data);
