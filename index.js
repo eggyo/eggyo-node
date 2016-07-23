@@ -14,7 +14,7 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/geo/:lat/:lon', function(request, response) {
+app.get('/geo/:lat,:lon', function(request, response) {
   var loc = new LatLon(request.params.lat,request.params.lon);
   var utm = loc.toUtm()
   var mgrs = utm.toMgrs()
