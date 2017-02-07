@@ -45,11 +45,11 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
   var line_w = pic_size * metrePerPixel;
   var array = [];
 
-  for (i = 0; i < grid_row_count+1 ; i++) {
+  for (var i = 0; i < grid_row_count + 1 ; i++) {
     var start = new LatLon(start_n.lat, start_w.lon);  //nw
     var endLeft = start.destinationPoint(line_w * i,180);
     if (i != grid_row_count){
-      for (j = 0; j < grid_row_count ; j++) {
+      for (var j = 0; j < grid_row_count ; j++) {
         var rowPos = endLeft.destinationPoint(line_w * j,90);// center of grid
         var centerX = rowPos.destinationPoint(line_w/2,90);
         var centerY = rowPos.destinationPoint(line_w/2,180);
