@@ -1,0 +1,6 @@
+#!/bin/bash
+cd /Users/copperwired/documents/heroku/eggy-node
+
+git add * -f
+git commit -am "v.1"
+git push origin master
