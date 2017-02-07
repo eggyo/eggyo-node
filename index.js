@@ -55,7 +55,7 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
         var centerY = rowPos.destinationPoint(line_w/2,180);
         var center = new LatLon(centerY.lat,centerX.lon);
         array.push({"center":{"lat":center.lat,"lon":center.lon}});
-        console.log("lat : "+center.lat +" lon : "+center.lon);
+        console.log("i : " +i+"/j : "+j+ "lat : "+center.lat +" lon : "+center.lon);
       }
     }
   }
