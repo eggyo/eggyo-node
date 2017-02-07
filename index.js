@@ -29,11 +29,11 @@ app.get('/geo/:lat,:lon', function(request, response) {
         response.json(data);
 });
 
-app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:count', function(request, response) {
+app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', function(request, response) {
   var loc = new LatLon(request.params.lat,request.params.lon);
   var zoom_scale = request.params.zoom;
-  var grid_row_count = request.params.count;
-  var metrePerPixel = 156543.03392 * Math.cos(14.390 * Math.PI / 180) / Math.pow(2, zoom_scale);
+  var grid_row_count = request.params.gridCount;
+  var metrePerPixel = 156543.03392 * Math.cos(loc.lat * Math.PI / 180) / Math.pow(2, zoom_scale);
   var pic_size = 580;
   var grid_w = (pic_size * metrePerPixel) * (grid_row_count/2);
 
@@ -48,7 +48,6 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:count', func
   for (i = 0; i < grid_row_count+1 ; i++) {
     var start = new LatLon(start_n.lat, start_w.lon);  //nw
     var endLeft = start.destinationPoint(line_w * i,180);
-    var endRight = new LatLon(endLeft.lat, start_e.lon);
     if (i != grid_row_count){
       for (j = 0; j < grid_row_count ; j++) {
         var rowPos = endLeft.destinationPoint(line_w * j,90);// center of grid
