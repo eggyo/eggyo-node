@@ -45,7 +45,7 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
   var line_w = pic_size * metrePerPixel;
   var array = [];
 
-  for (var i = 0; i < grid_row_count + 1 ; i++) {
+  for (var i = 0; i < grid_row_count  ; i++) {
     var start = new LatLon(start_n.lat, start_w.lon);  //nw
     var endLeft = start.destinationPoint(line_w * i,180);
     if (i != grid_row_count){
