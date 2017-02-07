@@ -58,7 +58,7 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
       }
     }
   }
-  response.json({"result":array.length,"array":array});
+  response.json({"metrePerPixel":metrePerPixel,"grid_w":grid_w,"line_w":line_w,"grid_row_count":grid_row_count,"result":array.length,"array":array});
 
 });
 
