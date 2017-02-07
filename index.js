@@ -55,11 +55,11 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:count', func
         var centerX = rowPos.destinationPoint(line_w/2,90);
         var centerY = rowPos.destinationPoint(line_w/2,180);
         var center = new LatLon(centerY.lat,centerX.lon);
-        array.push({"center":center});
+        array.push({"center":{"lat":center.lat,"lon":center.lon}});
       }
     }
   }
-  response.json(array);
+  response.json({"result":array.length,"array":array});
 
 });
 
