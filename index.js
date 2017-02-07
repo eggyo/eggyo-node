@@ -58,10 +58,9 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:count', func
         array.push({"center":center});
       }
     }
-    response.json(array);
-
-
   }
+  response.json(array);
+
 });
 
 app.listen(app.get('port'), function() {
