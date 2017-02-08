@@ -13,9 +13,8 @@ var config = {
     messagingSenderId: "308723759866"
   };
 firebase.initializeApp(config);
-var storage = firebase.storage();
-var storageRef = storage.ref();
-var imagesRef = storageRef.child('maps');
+var storageRef = firebase.storage().ref();
+var imagesRef = storageRef.child('map.png');
 
 app.set('port', (process.env.PORT || 5000));
 
