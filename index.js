@@ -3,6 +3,7 @@ var app = express();
 var LatLon = require('geodesy').LatLonEllipsoidal;
 var _Request = require('request');
 var Jimp = require("jimp");
+var fs = require("fs");
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -61,7 +62,8 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
 
         _Request(url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
-            Jimp.read(body).then(function (image) {
+            fs.createWriteStream('map.png')
+            Jimp.read('map.png').then(function (image) {
               // do stuff with the image
               console.log("image : " +image);
 
