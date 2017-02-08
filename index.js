@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var LatLon = require('geodesy').LatLonEllipsoidal;
 var _Request = require('request');
+var Jimp = require("jimp");
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -60,7 +61,13 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
 
         _Request(url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
-            console.log("body:"+body) // Show the HTML for the Google homepage.
+            Jimp.read(body).then(function (image) {
+              // do stuff with the image
+              console.log("image : " +image);
+
+            }).catch(function (err) {
+              console.log("image err: " +err);
+            });
           }
         })
 
