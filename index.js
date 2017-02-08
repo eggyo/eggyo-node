@@ -5,6 +5,7 @@ var firebase = require("firebase");
 var Jimp = require("jimp");
 var fs = require("fs");
 var path = require('path');
+/*
 var config = {
     apiKey: "AIzaSyDXBWLMwrx0E59PonmraQ7M7UTSnYKV6Fg",
     authDomain: "geo-node.firebaseapp.com",
@@ -13,9 +14,16 @@ var config = {
     messagingSenderId: "308723759866"
   };
 firebase.initializeApp(config);
+var gcloud = require('gcloud');
+
+var storage = gcloud.storage({
+  projectId: 'geo-node',
+  keyFilename: __dirname +'/key.json'
+});
+var bucket = storage.bucket('geo-node.appspot.com');
 var storageRef = firebase.storage().ref();
 var imagesRef = storageRef.child('map.png');
-
+*/
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
@@ -70,15 +78,12 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
         var center = new LatLon(centerY.lat,centerX.lon);
         array.push({"center":{"lat":center.lat,"lon":center.lon}});
         var url = 'http://maps.googleapis.com/maps/api/staticmap?center='+center.lat+','+center.lon+'&zoom='+zoom_scale+'&size=580x640&scale=2&maptype=satellite&key=AIzaSyDWgJlI9jXcz_brngz2mnJ-cwnHvetXAzo'
-
         Jimp.read(url).then(function (image) {
           // do stuff with the image
-          console.log("image : " +image);
-          image.crop( 0, 60, 1160, 1160)        // crop to the given region
-          var file = image
-          imagesRef.put(file).then(function(snapshot) {
-            console.log('Uploaded a blob or file!');
-          });
+          console.log("image good: " +image);
+          var file = image.crop( 0, 60, 1160, 1160).write(__dirname + '/map.png');        // crop to the given region
+          response.pipe(file);
+
           //response.sendFile(path.resolve('map.png'));
         }).catch(function (err) {
           console.log("image err: " +err);
