@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var LatLon = require('geodesy').LatLonEllipsoidal;
-var request = require("request")
+var request = require('request');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -58,14 +58,11 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
         array.push({"center":{"lat":center.lat,"lon":center.lon}});
         var url = 'http://maps.googleapis.com/maps/api/staticmap?center='+center.lat+','+center.lon+'&zoom='+zoom_scale+'&size=580x640&scale=2&maptype=satellite&key=AIzaSyDWgJlI9jXcz_brngz2mnJ-cwnHvetXAzo'
 
-        request({
-          url: url,
-          json: true
-        }, function (error, response, body) {
-          if (!error && response.statusCode === 200) {
-            console.log("body:"+body) // Print the json response
+        request(url, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            console.log("body:"+body) // Show the HTML for the Google homepage.
           }
-        });
+        })
 
         console.log("i : " +i+"/j : "+j+ "lat : "+center.lat +" lon : "+center.lon);
       }
