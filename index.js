@@ -70,9 +70,9 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
               }).catch(function (err) {
                 console.log("image err: " +err);
               });
-            )
+            );
           }
-        })
+        });
 
         console.log("i : " +i+"/j : "+j+ "lat : "+center.lat +" lon : "+center.lon);
       }
