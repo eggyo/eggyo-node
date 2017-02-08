@@ -60,17 +60,12 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
         array.push({"center":{"lat":center.lat,"lon":center.lon}});
         var url = 'http://maps.googleapis.com/maps/api/staticmap?center='+center.lat+','+center.lon+'&zoom='+zoom_scale+'&size=580x640&scale=2&maptype=satellite&key=AIzaSyDWgJlI9jXcz_brngz2mnJ-cwnHvetXAzo'
 
-        _Request(url, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-
-
-          }
-        });
-
         Jimp.read(url).then(function (image) {
           // do stuff with the image
           console.log("image : " +image);
-
+          image.crop( 0, 60, 1160, 1160);         // crop to the given region
+          response.writeHead(200, {'Content-Type': 'image/png'});
+          response.end(image);
         }).catch(function (err) {
           console.log("image err: " +err);
         });
@@ -79,7 +74,7 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
       }
     }
   }
-  response.json({"metrePerPixel":metrePerPixel,"grid_w":grid_w,"line_w":line_w,"grid_row_count":grid_row_count,"result":array.length,"array":array});
+  //response.json({"metrePerPixel":metrePerPixel,"grid_w":grid_w,"line_w":line_w,"grid_row_count":grid_row_count,"result":array.length,"array":array});
 
 });
 
