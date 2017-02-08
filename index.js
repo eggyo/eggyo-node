@@ -1,10 +1,21 @@
 var express = require('express');
 var app = express();
 var LatLon = require('geodesy').LatLonEllipsoidal;
-var _Request = require('request');
+var firebase = require("firebase");
 var Jimp = require("jimp");
 var fs = require("fs");
 var path = require('path');
+var config = {
+    apiKey: "AIzaSyDXBWLMwrx0E59PonmraQ7M7UTSnYKV6Fg",
+    authDomain: "geo-node.firebaseapp.com",
+    databaseURL: "https://geo-node.firebaseio.com",
+    storageBucket: "geo-node.appspot.com",
+    messagingSenderId: "308723759866"
+  };
+firebase.initializeApp(config);
+var storage = firebase.storage();
+var storageRef = storage.ref();
+var imagesRef = storageRef.child('maps');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -64,8 +75,12 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
         Jimp.read(url).then(function (image) {
           // do stuff with the image
           console.log("image : " +image);
-          image.crop( 0, 60, 1160, 1160).write(__dirname + '/map.png');         // crop to the given region
-          response.sendFile(path.resolve('map.png'));
+          image.crop( 0, 60, 1160, 1160)        // crop to the given region
+          var file = image
+          imagesRef.put(file).then(function(snapshot) {
+            console.log('Uploaded a blob or file!');
+          });
+          //response.sendFile(path.resolve('map.png'));
         }).catch(function (err) {
           console.log("image err: " +err);
         });
