@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "ejs": "2.4.1",
-    "express": "4.13.3"
+    "express": "4.13.3",
+    "jimp": "^0.2.27",
+    "request": "^2.79.0"
   },
   "repository": {
     "type": "git",
