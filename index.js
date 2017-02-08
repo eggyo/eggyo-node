@@ -60,13 +60,18 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
         array.push({"center":{"lat":center.lat,"lon":center.lon}});
         var url = 'http://maps.googleapis.com/maps/api/staticmap?center='+center.lat+','+center.lon+'&zoom='+zoom_scale+'&size=580x640&scale=2&maptype=satellite&key=AIzaSyDWgJlI9jXcz_brngz2mnJ-cwnHvetXAzo'
 
-        _Request(url).pipe(fs.createWriteStream('map.png'))
-        Jimp.read('map.png').then(function (image) {
-          // do stuff with the image
-          console.log("image : " +image);
+        _Request(url, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var wstream = fs.createWriteStream('map.png');
+            wstream.write(body);
+            Jimp.read('map.png').then(function (image) {
+              // do stuff with the image
+              console.log("image : " +image);
 
-        }).catch(function (err) {
-          console.log("image err: " +err);
+            }).catch(function (err) {
+              console.log("image err: " +err);
+            });
+          }
         });
 
         console.log("i : " +i+"/j : "+j+ "lat : "+center.lat +" lon : "+center.lon);
