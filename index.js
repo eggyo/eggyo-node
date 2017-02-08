@@ -81,8 +81,8 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
         Jimp.read(url).then(function (image) {
           // do stuff with the image
           console.log("image good: " +image);
-          image.crop( 0, 60, 1160, 1160).write('./public/out.png');        // crop to the given region
-          response.sendFile(path.resolve('./public/out.png'));
+          image.crop( 0, 60, 1160, 1160).write('./tmp/out.png');        // crop to the given region
+          response.sendFile(path.resolve('./tmp/out.png'));
         }).catch(function (err) {
           console.log("image err: " +err);
         });
