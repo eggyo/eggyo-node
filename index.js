@@ -62,14 +62,15 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
 
         _Request(url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
-            fs.createWriteStream('map.png')
-            Jimp.read('map.png').then(function (image) {
-              // do stuff with the image
-              console.log("image : " +image);
+            fs.createWriteStream('map.png').pipe(
+              Jimp.read('map.png').then(function (image) {
+                // do stuff with the image
+                console.log("image : " +image);
 
-            }).catch(function (err) {
-              console.log("image err: " +err);
-            });
+              }).catch(function (err) {
+                console.log("image err: " +err);
+              });
+            )
           }
         })
 
