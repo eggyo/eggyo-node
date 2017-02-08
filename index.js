@@ -64,8 +64,7 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
           // do stuff with the image
           console.log("image : " +image);
           image.crop( 0, 60, 1160, 1160);         // crop to the given region
-          response.writeHead(200, {'Content-Type': 'image/png'});
-          response.end(image);
+          response.sendFile(image);
         }).catch(function (err) {
           console.log("image err: " +err);
         });
