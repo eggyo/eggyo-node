@@ -68,12 +68,12 @@ app.get('/loadGoogleMapImage/center=:lat,:lon&zoom=:zoom&gridCount=:gridCount', 
                 data += chunk;
             });
             res.on('end', function () {
-                console.log(data);
+                console.log("data:"+data);
 
             });
         });
         request.on('error', function (e) {
-            console.log(e.message);
+            console.log("error:"+e.message);
         });
         request.end();
 
