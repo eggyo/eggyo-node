@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 var LatLon = require('geodesy').LatLonEllipsoidal;
+var LatLonOp = require('geodesy').LatLonSpherical;
+
 var firebase = require("firebase");
 var Jimp = require("jimp");
 var fs = require("fs");
@@ -46,6 +48,20 @@ app.get('/geo/:lat,:lon', function(request, response) {
             "latLon": loc.toString(),
             "utm": utm.toString(),
             "mgrs": mgrs.toString()
+        }
+    };
+        response.json(data);
+});
+app.get('/intersection/:lat1,:lon1,:b1&:lat2,:lon2,:b2', function(request, response) {
+  var p1 = new LatLonOp(request.params.lat1, request.params.lat1);
+  var p2 = new LatLonOp(request.params.lat2, request.params.lat2);
+  var pInt = LatLonOp.intersection(p1, request.params.b1, p2, request.params.b2);
+
+  var data = {
+        "result": {
+            "latLon1": p1.toString(),
+            "latLon2": p2.toString(),
+            "latLonIntersect": pInt.toString(),
         }
     };
         response.json(data);
