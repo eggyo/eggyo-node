@@ -59,9 +59,9 @@ app.get('/intersection/:lat1,:lon1,:b1&:lat2,:lon2,:b2', function(request, respo
 
   var data = {
         "result": {
-            "latLon1": p1.toString(),
-            "latLon2": p2.toString(),
-            "latLonIntersect": pInt.toString(),
+            "latLon1": p1,
+            "latLon2": p2,
+            "latLonIntersect": pInt
         }
     };
         response.json(data);
