@@ -53,8 +53,8 @@ app.get('/geo/:lat,:lon', function(request, response) {
         response.json(data);
 });
 app.get('/intersection/:lat1,:lon1,:b1&:lat2,:lon2,:b2', function(request, response) {
-  var p1 = new LatLonOp(request.params.lat1, request.params.lat1);
-  var p2 = new LatLonOp(request.params.lat2, request.params.lat2);
+  var p1 = new LatLonOp(request.params.lat1, request.params.lon1);
+  var p2 = new LatLonOp(request.params.lat2, request.params.lon2);
   var pInt = LatLonOp.intersection(p1, request.params.b1, p2, request.params.b2);
 
   var data = {
