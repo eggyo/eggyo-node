@@ -49,6 +49,8 @@ app.get('/startcrawer', function(req, res) {
     const $ = cheerio.load(body);
     var test = $('div[id=wizard]').html();
     console.log('------->test:', test); // Print the HTML for the Google homepage.
+    response.json(test);
+
   });
 });
 
