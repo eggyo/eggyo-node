@@ -9,6 +9,7 @@ var fs = require("fs");
 var path = require('path');
 var cheerio = require('cheerio');
 var request = require('request');
+var schedule = require('node-schedule');
 
 
 /*
@@ -43,6 +44,9 @@ app.get('/', function(request, response) {
 });
 
 app.get('/startcrawer/:num', function(req, res) {
+  schedule.scheduleJob('/10 * * * * *', function() {
+    console.log('The answer to life, the universe, and everything!');
+  });
   var num = req.params.num;
   request('http://www.trueplookpanya.com/examination/answer/' + num, function(error, response, body) {
     //console.log('error:', error); // Print the error if one occurred
@@ -76,7 +80,7 @@ app.get('/startcrawer/:num', function(req, res) {
           //console.log('------->incorrect:' + j + ':' + msg); // Print the HTML for the Google homepage.
         }
       });
-      
+
       var obj = {
         "id": num,
         "category": name,
@@ -84,11 +88,11 @@ app.get('/startcrawer/:num', function(req, res) {
         "question": question,
         "correct": correct,
         "incorrect": incorrect,
-        "correct_detail":""
+        "correct_detail": ""
       };
-      if (correct == '' || incorrect.length == 0){
+      if (correct == '' || incorrect.length == 0) {
 
-      }else {
+      } else {
         test[i] = obj;
         //console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
       }
