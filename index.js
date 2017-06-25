@@ -55,11 +55,19 @@ app.get('/startcrawer', function(req, res) {
       var ul = $(elem).children('ul[id=choice-list]').children().each(function(j, el) {
 
         if ($(el).children('.answer').text() != '') {
-          correct = $(el).children('.answer').text();
-          console.log('------->correct:' + j + ':' + $(el).children('.answer').text()); // Print the HTML for the Google homepage.
+          var msg = $(el).children('.answer').text();
+          msg.replace('  ','');
+          msg.replace('\n','');
+          msg.replace('ตัวเลือกที่ ','');
+          correct = msg;
+          console.log('------->correct:' + j + ':' + msg); // Print the HTML for the Google homepage.
         } else {
-          incorrect.push($(el).children('li').text());
-          console.log('------->incorrect:' + j + ':' + $(el).children('li').text()); // Print the HTML for the Google homepage.
+          var msg = $(el).children('li').text();
+          msg.replace('  ','');
+          msg.replace('\n','');
+          msg.replace('ตัวเลือกที่ ','');
+          incorrect.push(msg);
+          console.log('------->incorrect:' + j + ':' + msg); // Print the HTML for the Google homepage.
         }
       });
 
