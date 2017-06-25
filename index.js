@@ -42,8 +42,9 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/startcrawer', function(req, res) {
-  request('http://www.trueplookpanya.com/examination/answer/13244', function(error, response, body) {
+app.get('/startcrawer/:num', function(req, res) {
+  var num = req.params.num;
+  request('http://www.trueplookpanya.com/examination/answer/' + num, function(error, response, body) {
     console.log('error:', error); // Print the error if one occurred
     console.log('body:', body); // Print the HTML for the Google homepage.
     const $ = cheerio.load(body);
@@ -56,17 +57,17 @@ app.get('/startcrawer', function(req, res) {
 
         if ($(el).children('.answer').text() != '') {
           var msg = $(el).children('.answer').text();
-          msg = msg.replace(/  /g,'');
-          msg = msg.replace('\n','');
-          msg = msg.replace('ตัวเลือกที่ ','');
+          msg = msg.replace(/  /g, '');
+          msg = msg.replace('\n', '');
+          msg = msg.replace('ตัวเลือกที่ ', '');
           msg = msg.substr(4);
           correct = msg;
           console.log('------->correct:' + j + ':' + msg); // Print the HTML for the Google homepage.
         } else {
           var msg = $(el).children('li').text();
-          msg = msg.replace(/  /g,'');
-          msg = msg.replace('\n','');
-          msg = msg.replace('ตัวเลือกที่ ','');
+          msg = msg.replace(/  /g, '');
+          msg = msg.replace('\n', '');
+          msg = msg.replace('ตัวเลือกที่ ', '');
           msg = msg.substr(4);
           incorrect.push(msg);
           console.log('------->incorrect:' + j + ':' + msg); // Print the HTML for the Google homepage.
