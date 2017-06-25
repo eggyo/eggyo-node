@@ -81,8 +81,13 @@ app.get('/startcrawer/:num', function(req, res) {
         "correct": correct,
         "incorrect": incorrect
       };
-      test[i] = obj;
-      console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
+      if (correct == '' || incorrect.length == 0{
+        
+      }else {
+        test[i] = obj;
+        console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
+      }
+
 
     });
     res.json(test);
