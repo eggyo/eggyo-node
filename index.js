@@ -55,7 +55,7 @@ app.get('/startcrawer', function(req, res) {
       var question = $(elem).children('.question').children('h2').text();
       var ul = $(elem).children('ul[id=choice-list]').children().each(function(j, el) {
 
-        if ($(el).children('.answer')) {
+        if ($(el).children('.answer').text() != '') {
           correct = $(el).children('.answer').text();
           console.log('------->correct:' + j + ':' + $(el).children('.answer').text()); // Print the HTML for the Google homepage.
 
