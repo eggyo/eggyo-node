@@ -59,6 +59,7 @@ app.get('/startcrawer', function(req, res) {
           msg = msg.replace(/  /g,'');
           msg = msg.replace('\n','');
           msg = msg.replace('ตัวเลือกที่ ','');
+          msg = msg.substr(4);
           correct = msg;
           console.log('------->correct:' + j + ':' + msg); // Print the HTML for the Google homepage.
         } else {
@@ -66,6 +67,7 @@ app.get('/startcrawer', function(req, res) {
           msg = msg.replace(/  /g,'');
           msg = msg.replace('\n','');
           msg = msg.replace('ตัวเลือกที่ ','');
+          msg = msg.substr(4);
           incorrect.push(msg);
           console.log('------->incorrect:' + j + ':' + msg); // Print the HTML for the Google homepage.
         }
