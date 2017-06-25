@@ -52,7 +52,7 @@ app.get('/startcrawer', function(req, res) {
     var incorrect = [];
 
     $('div[id=wizard]').children().each(function(i, elem) {
-      var question = $(this).children('.question').children('h2').text();
+      var question = $(elem).children('.question').children('h2').text();
       $(this).children('ul[id=choice-list]').each(function(j, el) {
         if ($(el).children('.answer')) {
           correct = $(el).children('.answer').text();
