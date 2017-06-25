@@ -54,10 +54,10 @@ app.get('/startcrawer', function(req, res) {
     $('div[id=wizard]').children().each(function(i, elem) {
       var question = $(this).children('.question').children('h2').text();
       $(this).children('ul').each(function(j, el) {
-        if (el.children('.answer')) {
-          correct = el.children('.answer').text();
+        if ($(this).children('.answer')) {
+          correct = $(this).children('.answer').text();
         } else {
-          incorrect.push(el.children('li').text());
+          incorrect.push($(this).children('li').text());
         }
       });
 
