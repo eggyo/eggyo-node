@@ -48,13 +48,26 @@ app.get('/startcrawer', function(req, res) {
     console.log('body:', body); // Print the HTML for the Google homepage.
     const $ = cheerio.load(body);
     var test = [];
+    var correct;
+    var incorrect = [];
+
     $('div[id=wizard]').children().each(function(i, elem) {
       var question = $(this).children('.question').children('h2').text();
+      $(this).children('ul').each(function(j, el) {
+        if (el.children('.answer')) {
+          correct = el.children('.answer').text();
+        } else {
+          incorrect.push(el.children('li').text());
+        }
+      });
+
       var obj = {
-        "question": question
+        "question": question,
+        "correct": correct,
+        "incorrect": incorrect
       };
       test[i] = obj;
-      console.log('------->test:' + i + ':' + test[i]); // Print the HTML for the Google homepage.
+      console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
 
     });
     res.json(test);
