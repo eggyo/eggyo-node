@@ -47,8 +47,11 @@ app.get('/startcrawer', function(req, res) {
     console.log('error:', error); // Print the error if one occurred
     console.log('body:', body); // Print the HTML for the Google homepage.
     const $ = cheerio.load(body);
-    var test = $('div[id=wizard]').children()[0].html();
-    console.log('------->test:', test); // Print the HTML for the Google homepage.
+    $('div[id=wizard]').children().each(function(i, elem) {
+      var test = $(this).children('.article').text();
+      console.log('------->test:', test); // Print the HTML for the Google homepage.
+
+    });
     res.json(test);
 
   });
