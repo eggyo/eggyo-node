@@ -56,14 +56,14 @@ app.get('/startcrawer', function(req, res) {
 
         if ($(el).children('.answer').text() != '') {
           var msg = $(el).children('.answer').text();
-          msg = msg.replace('    ','');
+          msg = msg.replace(/  /g,'');
           msg = msg.replace('\n','');
           msg = msg.replace('ตัวเลือกที่ ','');
           correct = msg;
           console.log('------->correct:' + j + ':' + msg); // Print the HTML for the Google homepage.
         } else {
           var msg = $(el).children('li').text();
-          msg = msg.replace('  ','');
+          msg = msg.replace(/  /g,'');
           msg = msg.replace('\n','');
           msg = msg.replace('ตัวเลือกที่ ','');
           incorrect.push(msg);
