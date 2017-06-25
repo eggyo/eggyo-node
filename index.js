@@ -59,6 +59,8 @@ app.get('/startcrawer', function(req, res) {
         } else {
           incorrect.push($(el).children('li').text());
         }
+        console.log('------->$(el).children('li').text():' + j + ':' + $(el).children('li').text()); // Print the HTML for the Google homepage.
+
       });
 
       var obj = {
