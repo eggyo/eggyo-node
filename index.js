@@ -87,9 +87,9 @@ app.get('/startcrawer/:num', function(req, res) {
         "id": num,
         "category": name,
         "tag": tagArray,
-        "question": question,
-        "correct": correct,
-        "incorrect": incorrect,
+        "quiz": question,
+        "correct_ans": correct,
+        "incorrect_ans": incorrect,
         "correct_detail": ""
       };
       if (correct == '' || incorrect.length == 0) {
@@ -97,15 +97,25 @@ app.get('/startcrawer/:num', function(req, res) {
       } else {
         test[i] = obj;
         //console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
-        var data = '{"objects":' + JSON.stringify(test) + '}';
-        callParseServerCloudCode("createQuizFromQuizForm", data, function(response) {
 
-        });
       }
 
 
     });
     res.json(test);
+    var data = '{"objects":' + JSON.stringify(test) + '}';
+    callParseServerCloudCode("createQuizFromQuizForm", data, function(response) {
+
+    });
+    var categoryNameData = '{"categories":"' + categoryName + '"}';
+    callParseServerCloudCode("createCategoryToDataArray", categoryNameData, function(response) {
+
+    });
+    var tagNameData = '{"tags":"' + tagArray + '"}';
+    callParseServerCloudCode("createTagsToDataArray", tagNameData, function(response) {
+
+    });
+
 
   });
 });
