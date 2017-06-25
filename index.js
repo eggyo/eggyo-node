@@ -53,18 +53,17 @@ app.get('/startcrawer', function(req, res) {
 
     $('div[id=wizard]').children().each(function(i, elem) {
       var question = $(elem).children('.question').children('h2').text();
-      //var ul = $(elem).children('ul[id=choice-list]').children('label');
-      //console.log('------->ul' + ul); // Print the HTML for the Google homepage.
-
-
       var ul = $(elem).children('ul[id=choice-list]').children().each(function(j, el) {
 
         if ($(el).children('.answer')) {
           correct = $(el).children('.answer').text();
+          console.log('------->correct:' + j + ':' + $(el).children('.answer').text()); // Print the HTML for the Google homepage.
+
         } else {
           incorrect.push($(el).children('li').text());
+          console.log('------->incorrect:' + j + ':' + $(el).children('li').text()); // Print the HTML for the Google homepage.
+
         }
-        console.log('------->$(el)' + j + ':' + $(el).children('li').text()); // Print the HTML for the Google homepage.
 
       });
 
