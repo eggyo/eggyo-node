@@ -56,7 +56,7 @@ app.get('/startcrawer', function(req, res) {
 
         if ($(el).children('.answer').text() != '') {
           var msg = $(el).children('.answer').text();
-          msg = msg.replace('  ','');
+          msg = msg.replace('    ','');
           msg = msg.replace('\n','');
           msg = msg.replace('ตัวเลือกที่ ','');
           correct = msg;
