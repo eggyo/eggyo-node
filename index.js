@@ -42,11 +42,11 @@ app.set('view engine', 'ejs');
 app.get('/', function(request, response) {
   response.render('pages/index');
 });
-
+schedule.scheduleJob('/10 * * * * *', function() {
+  console.log('The answer to life, the universe, and everything!');
+});
 app.get('/startcrawer/:num', function(req, res) {
-  schedule.scheduleJob('/10 * * * * *', function() {
-    console.log('The answer to life, the universe, and everything!');
-  });
+
   var num = req.params.num;
   request('http://www.trueplookpanya.com/examination/answer/' + num, function(error, response, body) {
     //console.log('error:', error); // Print the error if one occurred
