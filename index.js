@@ -44,9 +44,11 @@ app.get('/', function(request, response) {
 });
 
 app.get('/startcrawer/:num', function(req, res) {
-  var sc = schedule.scheduleJob('*/10 * * * * *', function() {
-    console.log('The answer to life, the universe, and everything!');
-  });
+
+  //var sc = schedule.scheduleJob('*/10 * * * * *', function() {
+    //console.log('The answer to life, the universe, and everything!');
+  //});
+
   var num = req.params.num;
   request('http://www.trueplookpanya.com/examination/answer/' + num, function(error, response, body) {
     //console.log('error:', error); // Print the error if one occurred
@@ -95,6 +97,10 @@ app.get('/startcrawer/:num', function(req, res) {
       } else {
         test[i] = obj;
         //console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
+        var data = '{"objects":' + JSON.stringify(test) + '}';
+        callParseServerCloudCode("createQuizFromQuizForm", data, function(response) {
+
+        });
       }
 
 
@@ -188,6 +194,30 @@ app.listen(app.get('port'), function() {
 });
 
 
+function callParseServerCloudCode(methodName, requestMsg, responseMsg) {
+  console.log("callCloudCode:" + methodName + "\nrequestMsg:" + requestMsg);
+  var options = {
+    url: 'https://eggyo-quiz-db.herokuapp.com/parse/functions/' + methodName,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Parse-Application-Id': 'myAppId',
+      'X-Parse-REST-API-Key': 'myRestKey'
+    },
+    body: requestMsg
+  };
+
+  function callback(error, response, body) {
+    console.log("response:" + JSON.stringify(response));
+    if (!error && response.statusCode == 200) {
+      var info = JSON.parse(body);
+      responseMsg(info.result);
+    } else {
+      console.error("Unable to send message. Error :" + error);
+    }
+  }
+  request(options, callback);
+}
 
 
 
