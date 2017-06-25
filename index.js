@@ -45,11 +45,13 @@ app.get('/', function(request, response) {
 app.get('/startcrawer/:num', function(req, res) {
   var num = req.params.num;
   request('http://www.trueplookpanya.com/examination/answer/' + num, function(error, response, body) {
-    console.log('error:', error); // Print the error if one occurred
-    console.log('body:', body); // Print the HTML for the Google homepage.
+    //console.log('error:', error); // Print the error if one occurred
+    //console.log('body:', body); // Print the HTML for the Google homepage.
     const $ = cheerio.load(body);
     var test = [];
     var name = $('div .exa-detail-full').children('div .group-detail').children('h2').text();
+    var tagArray = name.split(' ');
+
     $('div[id=wizard]').children().each(function(i, elem) {
       var correct;
       var incorrect = [];
@@ -63,7 +65,7 @@ app.get('/startcrawer/:num', function(req, res) {
           msg = msg.replace('ตัวเลือกที่ ', '');
           msg = msg.substr(4);
           correct = msg;
-          console.log('------->correct:' + j + ':' + msg); // Print the HTML for the Google homepage.
+          //console.log('------->correct:' + j + ':' + msg); // Print the HTML for the Google homepage.
         } else {
           var msg = $(el).children('li').text();
           msg = msg.replace(/  /g, '');
@@ -71,21 +73,24 @@ app.get('/startcrawer/:num', function(req, res) {
           msg = msg.replace('ตัวเลือกที่ ', '');
           msg = msg.substr(4);
           incorrect.push(msg);
-          console.log('------->incorrect:' + j + ':' + msg); // Print the HTML for the Google homepage.
+          //console.log('------->incorrect:' + j + ':' + msg); // Print the HTML for the Google homepage.
         }
       });
-
+      
       var obj = {
+        "id": num,
         "category": name,
+        "tag": tagArray,
         "question": question,
         "correct": correct,
-        "incorrect": incorrect
+        "incorrect": incorrect,
+        "correct_detail":""
       };
       if (correct == '' || incorrect.length == 0){
 
       }else {
         test[i] = obj;
-        console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
+        //console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
       }
 
 
