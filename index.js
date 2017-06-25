@@ -47,10 +47,14 @@ app.get('/startcrawer', function(req, res) {
     console.log('error:', error); // Print the error if one occurred
     console.log('body:', body); // Print the HTML for the Google homepage.
     const $ = cheerio.load(body);
-    var test=[];
+    var test = [];
     $('div[id=wizard]').children().each(function(i, elem) {
-      test[i] = $(this).children('.article').text();
-      console.log('------->test:'+i+':'+ test[i]); // Print the HTML for the Google homepage.
+      var question = $(this).children('.question').children('h2').text();
+      var obj = {
+        "question": question
+      };
+      test[i] = obj;
+      console.log('------->test:' + i + ':' + test[i]); // Print the HTML for the Google homepage.
 
     });
     res.json(test);
