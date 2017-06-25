@@ -65,8 +65,9 @@ app.get('/startcrawer', function(req, res) {
           incorrect.push($(el).children('li').text());
         }
         console.log('------->$(el)' + j + ':' + $(el).children('li').text()); // Print the HTML for the Google homepage.
-*/
+
       });
+      */
 
       var obj = {
         "question": question,
