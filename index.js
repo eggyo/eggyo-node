@@ -96,7 +96,7 @@ var sc = schedule.scheduleJob('*/10 * * * * *', function() {
           //console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
         }
       });
-      res.json(test);
+      //res.json(test);
       var data = '{"objects":' + JSON.stringify(test) + '}';
       callParseServerCloudCode("createQuizFromQuizForm", data, function(response) {
         console.log('createQuizFromQuizForm : ' + response);
