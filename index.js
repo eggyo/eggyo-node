@@ -81,7 +81,7 @@ var sc = schedule.scheduleJob('*/10 * * * * *', function() {
           }
         });
         var obj = {
-          "id": num,
+          "id": num.toString(),
           "category": name,
           "tag": tagArray,
           "quiz": question,
