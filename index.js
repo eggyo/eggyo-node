@@ -43,11 +43,12 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/startcrawer/start=:start,end=:end', function(req, res) {
-  var num = req.params.start;
-  var endNum = req.params.end;
-  var sc = schedule.scheduleJob('*/10 * * * * *', function() {
-    console.log('startcrawer : '+num);
+var num = 0;
+var endNum = 0;
+
+var sc = schedule.scheduleJob('*/10 * * * * *', function() {
+  console.log('startcrawer : ' + num);
+  if (num != 0) {
     request('http://www.trueplookpanya.com/examination/answer/' + num, function(error, response, body) {
       //console.log('error:', error); // Print the error if one occurred
       //console.log('body:', body); // Print the HTML for the Google homepage.
@@ -98,7 +99,7 @@ app.get('/startcrawer/start=:start,end=:end', function(req, res) {
       res.json(test);
       var data = '{"objects":' + JSON.stringify(test) + '}';
       callParseServerCloudCode("createQuizFromQuizForm", data, function(response) {
-        console.log('createQuizFromQuizForm : '+response);
+        console.log('createQuizFromQuizForm : ' + response);
       });
       var categoryNameData = '{"categories":"' + name + '"}';
       callParseServerCloudCode("createCategoryToDataArray", categoryNameData, function(response) {
@@ -110,11 +111,17 @@ app.get('/startcrawer/start=:start,end=:end', function(req, res) {
       });
       if (num == endNum) {
         sc.cancel();
-      }else {
+      } else {
         num += 1;
       }
     });
-  });
+  }
+});
+
+app.get('/startcrawer/start=:start,end=:end', function(req, res) {
+  num = req.params.start;
+  endNum = req.params.end;
+
 });
 
 app.get('/geo/:lat,:lon', function(request, response) {
