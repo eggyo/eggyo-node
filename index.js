@@ -43,80 +43,77 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/startcrawer/:num', function(req, res) {
+app.get('/startcrawer/start=:start,end=:end', function(req, res) {
+  var num = req.params.start;
+  var endNum = req.params.end;
+  var sc = schedule.scheduleJob('*/10 * * * * *', function() {
+    console.log('startcrawer : '+num);
+    request('http://www.trueplookpanya.com/examination/answer/' + num, function(error, response, body) {
+      //console.log('error:', error); // Print the error if one occurred
+      //console.log('body:', body); // Print the HTML for the Google homepage.
+      const $ = cheerio.load(body);
+      var test = [];
+      var name = $('div .exa-detail-full').children('div .group-detail').children('h2').text();
+      var tagArray = name.split(' ');
+      $('div[id=wizard]').children().each(function(i, elem) {
+        var correct;
+        var incorrect = [];
+        var question = $(elem).children('.question').children('h2').text();
+        var ul = $(elem).children('ul[id=choice-list]').children().each(function(j, el) {
 
-  //var sc = schedule.scheduleJob('*/10 * * * * *', function() {
-    //console.log('The answer to life, the universe, and everything!');
-  //});
+          if ($(el).children('.answer').text() != '') {
+            var msg = $(el).children('.answer').text();
+            msg = msg.replace(/  /g, '');
+            msg = msg.replace('\n', '');
+            msg = msg.replace('ตัวเลือกที่ ', '');
+            msg = msg.substr(4);
+            correct = msg;
+            //console.log('------->correct:' + j + ':' + msg); // Print the HTML for the Google homepage.
+          } else {
+            var msg = $(el).children('li').text();
+            msg = msg.replace(/  /g, '');
+            msg = msg.replace('\n', '');
+            msg = msg.replace('ตัวเลือกที่ ', '');
+            msg = msg.substr(4);
+            incorrect.push(msg);
+            //console.log('------->incorrect:' + j + ':' + msg); // Print the HTML for the Google homepage.
+          }
+        });
+        var obj = {
+          "id": num,
+          "category": name,
+          "tag": tagArray,
+          "quiz": question,
+          "correct_ans": correct,
+          "incorrect_ans": incorrect,
+          "correct_detail": ""
+        };
+        if (correct == '' || incorrect.length == 0) {
 
-  var num = req.params.num;
-  request('http://www.trueplookpanya.com/examination/answer/' + num, function(error, response, body) {
-    //console.log('error:', error); // Print the error if one occurred
-    //console.log('body:', body); // Print the HTML for the Google homepage.
-    const $ = cheerio.load(body);
-    var test = [];
-    var name = $('div .exa-detail-full').children('div .group-detail').children('h2').text();
-    var tagArray = name.split(' ');
-
-    $('div[id=wizard]').children().each(function(i, elem) {
-      var correct;
-      var incorrect = [];
-      var question = $(elem).children('.question').children('h2').text();
-      var ul = $(elem).children('ul[id=choice-list]').children().each(function(j, el) {
-
-        if ($(el).children('.answer').text() != '') {
-          var msg = $(el).children('.answer').text();
-          msg = msg.replace(/  /g, '');
-          msg = msg.replace('\n', '');
-          msg = msg.replace('ตัวเลือกที่ ', '');
-          msg = msg.substr(4);
-          correct = msg;
-          //console.log('------->correct:' + j + ':' + msg); // Print the HTML for the Google homepage.
         } else {
-          var msg = $(el).children('li').text();
-          msg = msg.replace(/  /g, '');
-          msg = msg.replace('\n', '');
-          msg = msg.replace('ตัวเลือกที่ ', '');
-          msg = msg.substr(4);
-          incorrect.push(msg);
-          //console.log('------->incorrect:' + j + ':' + msg); // Print the HTML for the Google homepage.
+          test[i] = obj;
+          //console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
         }
       });
+      res.json(test);
+      var data = '{"objects":' + JSON.stringify(test) + '}';
+      callParseServerCloudCode("createQuizFromQuizForm", data, function(response) {
+        console.log('createQuizFromQuizForm : '+response);
+      });
+      var categoryNameData = '{"categories":"' + categoryName + '"}';
+      callParseServerCloudCode("createCategoryToDataArray", categoryNameData, function(response) {
 
-      var obj = {
-        "id": num,
-        "category": name,
-        "tag": tagArray,
-        "quiz": question,
-        "correct_ans": correct,
-        "incorrect_ans": incorrect,
-        "correct_detail": ""
-      };
-      if (correct == '' || incorrect.length == 0) {
+      });
+      var tagNameData = '{"tags":"' + tagArray + '"}';
+      callParseServerCloudCode("createTagsToDataArray", tagNameData, function(response) {
 
-      } else {
-        test[i] = obj;
-        //console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
-
+      });
+      if (num == endNum) {
+        sc.cancel();
+      }else {
+        num += 1;
       }
-
-
     });
-    res.json(test);
-    var data = '{"objects":' + JSON.stringify(test) + '}';
-    callParseServerCloudCode("createQuizFromQuizForm", data, function(response) {
-
-    });
-    var categoryNameData = '{"categories":"' + categoryName + '"}';
-    callParseServerCloudCode("createCategoryToDataArray", categoryNameData, function(response) {
-
-    });
-    var tagNameData = '{"tags":"' + tagArray + '"}';
-    callParseServerCloudCode("createTagsToDataArray", tagNameData, function(response) {
-
-    });
-
-
   });
 });
 
