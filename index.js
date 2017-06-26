@@ -119,8 +119,8 @@ var sc = schedule.scheduleJob('*/10 * * * * *', function() {
 });
 
 app.get('/startcrawer/start=:start,end=:end', function(req, res) {
-  num = req.params.start;
-  endNum = req.params.end;
+  num = parseInt(req.params.start);
+  endNum = parseInt(req.params.end);
 
 });
 
