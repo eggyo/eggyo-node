@@ -100,7 +100,7 @@ app.get('/startcrawer/start=:start,end=:end', function(req, res) {
       callParseServerCloudCode("createQuizFromQuizForm", data, function(response) {
         console.log('createQuizFromQuizForm : '+response);
       });
-      var categoryNameData = '{"categories":"' + categoryName + '"}';
+      var categoryNameData = '{"categories":"' + name + '"}';
       callParseServerCloudCode("createCategoryToDataArray", categoryNameData, function(response) {
 
       });
