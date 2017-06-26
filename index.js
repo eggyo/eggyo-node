@@ -110,7 +110,7 @@ var sc = schedule.scheduleJob('*/10 * * * * *', function() {
 
       });
       if (num == endNum) {
-        sc.cancel();
+        num = 0;
       } else {
         num += 1;
       }
