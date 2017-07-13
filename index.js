@@ -2,6 +2,9 @@ var express = require('express');
 var app = express();
 var LatLon = require('geodesy').LatLonEllipsoidal;
 var LatLonOp = require('geodesy').LatLonSpherical;
+var Utm = require('geodesy').Utm;
+var Dms = require('geodesy').Dms;
+var Mgrs = require('geodesy').Mgrs;
 
 var firebase = require("firebase");
 var Jimp = require("jimp");
@@ -43,80 +46,6 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-var num = 0;
-var endNum = 0;
-
-var sc = schedule.scheduleJob('*/10 * * * * *', function() {
-  console.log('startcrawer : ' + num);
-  if (num != 0) {
-    request('http://www.trueplookpanya.com/examination/answer/' + num, function(error, response, body) {
-      //console.log('error:', error); // Print the error if one occurred
-      //console.log('body:', body); // Print the HTML for the Google homepage.
-      const $ = cheerio.load(body);
-      var test = [];
-      var name = $('div .exa-detail-full').children('div .group-detail').children('h2').text();
-      var tagArray = name.split(' ');
-      $('div[id=wizard]').children().each(function(i, elem) {
-        var correct;
-        var incorrect = [];
-        var question = $(elem).children('.question').children('h2').text();
-        var ul = $(elem).children('ul[id=choice-list]').children().each(function(j, el) {
-
-          if ($(el).children('.answer').text() != '') {
-            var msg = $(el).children('.answer').text();
-            msg = msg.replace(/  /g, '');
-            msg = msg.replace('\n', '');
-            msg = msg.replace('ตัวเลือกที่ ', '');
-            msg = msg.substr(4);
-            correct = msg;
-            //console.log('------->correct:' + j + ':' + msg); // Print the HTML for the Google homepage.
-          } else {
-            var msg = $(el).children('li').text();
-            msg = msg.replace(/  /g, '');
-            msg = msg.replace('\n', '');
-            msg = msg.replace('ตัวเลือกที่ ', '');
-            msg = msg.substr(4);
-            incorrect.push(msg);
-            //console.log('------->incorrect:' + j + ':' + msg); // Print the HTML for the Google homepage.
-          }
-        });
-        var obj = {
-          "id": num.toString(),
-          "category": name,
-          "tag": tagArray,
-          "quiz": question,
-          "correct_ans": correct,
-          "incorrect_ans": incorrect,
-          "correct_detail": ""
-        };
-        if (correct == '' || incorrect.length == 0) {
-
-        } else {
-          test[i] = obj;
-          //console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
-        }
-      });
-      //res.json(test);
-      var data = '{"objects":' + JSON.stringify(test) + '}';
-      callParseServerCloudCode("createQuizFromQuizForm", data, function(response) {
-        console.log('createQuizFromQuizForm : ' + response);
-      });
-      var categoryNameData = '{"categories":"' + name + '"}';
-      callParseServerCloudCode("createCategoryToDataArray", categoryNameData, function(response) {
-
-      });
-      var tagNameData = '{"tags":"' + tagArray + '"}';
-      callParseServerCloudCode("createTagsToDataArray", tagNameData, function(response) {
-
-      });
-      if (num == endNum) {
-        num = 0;
-      } else {
-        num += 1;
-      }
-    });
-  }
-});
 
 app.get('/startcrawer/start=:start,end=:end', function(req, res) {
   num = parseInt(req.params.start);
@@ -138,6 +67,38 @@ app.get('/geo/:lat,:lon', function(request, response) {
   };
   response.json(data);
 });
+
+app.get('/geoconvert/m2u=:mgrs', function(request, response) {
+  var mgrs = Mgrs.parse(request.params.mgrs);
+  var utm = mgrs.toUtm()
+  var latlon = utm.toLatLonE()
+
+  var data = {
+    "result": {
+      "latLon": latlon.toString(),
+      "utm": utm.toString(),
+      "mgrs": mgrs.toString()
+    }
+  };
+  response.json(data);
+});
+
+app.get('/geoconvert/u2m=:utm', function(request, response) {
+  var utm = Utm.parse(request.params.utm);
+  var mgrs = utm.toMgrs()
+  var latlon = utm.toLatLonE()
+
+  var data = {
+    "result": {
+      "latLon": latlon.toString(),
+      "utm": utm.toString(),
+      "mgrs": mgrs.toString()
+    }
+  };
+  response.json(data);
+});
+
+
 app.get('/intersection/:lat1,:lon1,:b1&:lat2,:lon2,:b2', function(request, response) {
   var p1 = new LatLonOp(request.params.lat1, request.params.lon1);
   var p2 = new LatLonOp(request.params.lat2, request.params.lon2);
@@ -237,3 +198,79 @@ function callParseServerCloudCode(methodName, requestMsg, responseMsg) {
 
 
 //
+/*
+var num = 0;
+var endNum = 0;
+
+//var sc = schedule.scheduleJob('/10 * * * * *', function() {
+  console.log('startcrawer : ' + num);
+  if (num != 0) {
+    request('http://www.trueplookpanya.com/examination/answer/' + num, function(error, response, body) {
+      //console.log('error:', error); // Print the error if one occurred
+      //console.log('body:', body); // Print the HTML for the Google homepage.
+      const $ = cheerio.load(body);
+      var test = [];
+      var name = $('div .exa-detail-full').children('div .group-detail').children('h2').text();
+      var tagArray = name.split(' ');
+      $('div[id=wizard]').children().each(function(i, elem) {
+        var correct;
+        var incorrect = [];
+        var question = $(elem).children('.question').children('h2').text();
+        var ul = $(elem).children('ul[id=choice-list]').children().each(function(j, el) {
+
+          if ($(el).children('.answer').text() != '') {
+            var msg = $(el).children('.answer').text();
+            msg = msg.replace(/  /g, '');
+            msg = msg.replace('\n', '');
+            msg = msg.replace('ตัวเลือกที่ ', '');
+            msg = msg.substr(4);
+            correct = msg;
+            //console.log('------->correct:' + j + ':' + msg); // Print the HTML for the Google homepage.
+          } else {
+            var msg = $(el).children('li').text();
+            msg = msg.replace(/  /g, '');
+            msg = msg.replace('\n', '');
+            msg = msg.replace('ตัวเลือกที่ ', '');
+            msg = msg.substr(4);
+            incorrect.push(msg);
+            //console.log('------->incorrect:' + j + ':' + msg); // Print the HTML for the Google homepage.
+          }
+        });
+        var obj = {
+          "id": num.toString(),
+          "category": name,
+          "tag": tagArray,
+          "quiz": question,
+          "correct_ans": correct,
+          "incorrect_ans": incorrect,
+          "correct_detail": ""
+        };
+        if (correct == '' || incorrect.length == 0) {
+
+        } else {
+          test[i] = obj;
+          //console.log('------->test:' + i + ':' + obj); // Print the HTML for the Google homepage.
+        }
+      });
+      //res.json(test);
+      var data = '{"objects":' + JSON.stringify(test) + '}';
+      callParseServerCloudCode("createQuizFromQuizForm", data, function(response) {
+        console.log('createQuizFromQuizForm : ' + response);
+      });
+      var categoryNameData = '{"categories":"' + name + '"}';
+      callParseServerCloudCode("createCategoryToDataArray", categoryNameData, function(response) {
+
+      });
+      var tagNameData = '{"tags":"' + tagArray + '"}';
+      callParseServerCloudCode("createTagsToDataArray", tagNameData, function(response) {
+
+      });
+      if (num == endNum) {
+        num = 0;
+      } else {
+        num += 1;
+      }
+    });
+  }
+});
+*/
