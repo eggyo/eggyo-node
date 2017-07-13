@@ -69,7 +69,7 @@ app.get('/geo/:lat,:lon', function(request, response) {
 });
 
 app.get('/geoconvert/m2u=:mgrs', function(request, response) {
-  var mgrs = Mgrs.parse(request.params.mgrs);
+  var mgrs = Mgrs.parse(request.params.mgrs.toUpperCase());
   var utm = mgrs.toUtm()
   var latlon = utm.toLatLonE()
 
@@ -84,7 +84,7 @@ app.get('/geoconvert/m2u=:mgrs', function(request, response) {
 });
 
 app.get('/geoconvert/u2m=:utm', function(request, response) {
-  var utm = Utm.parse(request.params.utm);
+  var utm = Utm.parse(request.params.utm..toUpperCase());
   var mgrs = utm.toMgrs()
   var latlon = utm.toLatLonE()
 
